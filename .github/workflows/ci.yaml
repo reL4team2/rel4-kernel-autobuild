@@ -37,7 +37,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           title: "New release"
-          tag: release-${{ steps.date.outputs.date }}
+          tag: rel4-release-${{ steps.date.outputs.date }}
           workdir: build 
 
       - name: Compress Tar Folder
