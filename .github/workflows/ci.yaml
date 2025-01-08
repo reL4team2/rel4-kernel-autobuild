@@ -40,36 +40,11 @@ jobs:
           tag: release-${{ steps.date.outputs.date }}
           workdir: build 
 
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: New release
-      #     path: |
-      #       build/seL4
-      # - name: release
-      #   uses: actions/create-release@v1
-      #   id: create_release
-      #   with:
-      #     draft: false
-      #     prerelease: false
-      #     release_name: 1.0.1
-      #     tag_name: ${{ github.ref }}
-      #     body_path: README.md
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
-      # - name: upload linux artifact
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./bin/azblogfilter.linux-amd64.tar.gz
-      #     asset_name: azblogfilter.linux-amd64.tar.gz
-      #     asset_content_type: application/gzip
       - name: Compress Tar Folder
-        run: tar cvzf seL4.tar.gz build/seL4
+        run: tar cvzf reL4.tar.gz build/reL4
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: release-${{ steps.date.outputs.date }}
           files: |
-            seL4.tar.gz
+            reL4.tar.gz
