@@ -1,6 +1,0 @@
-*
-!.gitignore
-!.github/workflows/*
-!build.sh
-!Dockerfile
-!README.md
