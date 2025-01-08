@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Environments
-        run: sudo apt-get update && sudo apt-get install docker.io -y
+        run: sudo apt install docker
       - name: Build Docker Image
         run: curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rel4team/build-scripts/refs/heads/mi_dev/scripts/start_docker.sh | bash -s -- .
       - name: Build files in the container
