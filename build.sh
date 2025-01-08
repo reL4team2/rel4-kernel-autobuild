@@ -26,7 +26,6 @@ cmake \
 ninja -C build all
 ninja -C build install
 
-rustup component add rust-src --toolchain nightly-2024-08-01-x86_64-unknown-linux-gnu
 rustup default nightly-2024-08-01
 
 url="https://github.com/seL4/rust-sel4";
@@ -35,6 +34,8 @@ common_args="--git $url --rev $rev --root $REL4_INSTALL_DIR";
 
 cargo install $common_args \
     sel4-kernel-loader-add-payload
+
+rustup default nightly-2024-08-01
 
 cargo install \
     -Z build-std=core,compiler_builtins \
