@@ -1,0 +1,62 @@
+name: Github Work Auto build
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  schedule:
+    - cron: "0 0 ? * ? "
+  workflow_dispatch:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Environments
+        run: sudo apt-get update && sudo apt-get install docker.io -y
+      - name: Build Docker Image
+        run: curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rel4team/build-scripts/refs/heads/mi_dev/scripts/start_docker.sh | bash -s -- .
+      - name: Build files in the container
+        run: docker exec -u ${USER} rel4_dev bash ./build.sh
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Create Release
+        uses: elgohr/Github-Release-Action@v5
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          title: "New release"
+          tag: release-${{ steps.date.outputs.date }}
+          workdir: build 
+
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: New release
+      #     path: |
+      #       build/seL4
+      # - name: release
+      #   uses: actions/create-release@v1
+      #   id: create_release
+      #   with:
+      #     draft: false
+      #     prerelease: false
+      #     release_name: 1.0.1
+      #     tag_name: ${{ github.ref }}
+      #     body_path: README.md
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      # - name: upload linux artifact
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./bin/azblogfilter.linux-amd64.tar.gz
+      #     asset_name: azblogfilter.linux-amd64.tar.gz
+      #     asset_content_type: application/gzip
+      - name: Compress Tar Folder
+        run: tar cvzf seL4.tar.gz build/seL4
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: release-${{ steps.date.outputs.date }}
+          files: |
+            seL4.tar.gz
