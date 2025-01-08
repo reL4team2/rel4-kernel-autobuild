@@ -35,6 +35,8 @@ common_args="--git $url --rev $rev --root $REL4_INSTALL_DIR";
 cargo install $common_args \
     sel4-kernel-loader-add-payload
 
+rustup toolchain install nightly-2024-08-01
+rustup component add rust-src --toolchain nightly-2024-08-01
 rustup default nightly-2024-08-01
 
 cargo install \
