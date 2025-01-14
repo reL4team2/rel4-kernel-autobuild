@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 默认不支持MCS，如果需要MCS，可以修改脚本使用传参的形式开启 -F KERNEL_MCS
-# 或者切换到另一个分支
+# 或者切换到rel4-mcs分支
 
 export REL4_INSTALL_DIR=$(realpath .)/build/reL4
 export REL4_PREFIX=$REL4_INSTALL_DIR
