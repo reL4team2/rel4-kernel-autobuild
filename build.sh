@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# 默认支持MCS，如果不需要MCS，可以修改脚本使用传参的形式关闭 -F KERNEL_MCS
+# 默认不支持MCS，如果需要MCS，可以修改脚本使用传参的形式开启 -F KERNEL_MCS
+# 或者切换到另一个分支
 
 export REL4_INSTALL_DIR=$(realpath .)/build/reL4
 export REL4_PREFIX=$REL4_INSTALL_DIR
@@ -12,12 +13,11 @@ git clone https://github.com/reL4team2/rel4-integral.git rel4_kernel --config ad
 git clone https://github.com/reL4team2/seL4_c_impl.git --config advice.detachedHead=false
 cd rel4_kernel
 cargo update -p home --precise 0.5.5
-cargo build --release --target aarch64-unknown-none-softfloat -F KERNEL_MCS
+cargo build --release --target aarch64-unknown-none-softfloat
 cd ../seL4_c_impl
 cmake \
     -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
     -DCMAKE_INSTALL_PREFIX=${REL4_PREFIX} \
-    -DKernelIsMCS=ON \
     -C ./kernel-settings-aarch64.cmake \
     -G Ninja \
     -S . \
