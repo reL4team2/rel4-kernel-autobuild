@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
     branches:
-      - rel4
+      - rel4-mcs
   schedule:
     - cron: "0 0 ? * ? "
   workflow_dispatch:
