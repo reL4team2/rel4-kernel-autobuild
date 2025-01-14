@@ -37,7 +37,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           title: "New release"
-          tag: rel4-release-${{ steps.date.outputs.date }}
+          tag: rel4-nomcs-release-${{ steps.date.outputs.date }}
           workdir: build 
 
       - name: Compress Tar Folder
@@ -45,6 +45,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: release-${{ steps.date.outputs.date }}
+          tag_name: rel4-nomcs-release-${{ steps.date.outputs.date }}
           files: |
             reL4.tar.gz
