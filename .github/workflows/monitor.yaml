@@ -1,15 +1,11 @@
-name: Github Work Auto build
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Monitor Rel4 Kernel Update
+
 on:
-  push:
-    branches:
-      - rel4-nomcs
-  schedule:
-    - cron: "0 0 ? * ? "
+  repository_dispatch:
+    types: [rel4-kernel-update-event]
   workflow_dispatch:
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+  runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
