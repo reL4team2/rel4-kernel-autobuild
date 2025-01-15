@@ -4,6 +4,7 @@ on:
   repository_dispatch:
     types: [rel4-kernel-update-event]
   workflow_dispatch:
+
 jobs:
   Make-Rel4-Kernel-Release:
     runs-on: ubuntu-latest
@@ -31,7 +32,7 @@ jobs:
       - name: Create Release
         uses: elgohr/Github-Release-Action@v5
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_FOR_REL4 }}
         with:
           title: "New release"
           tag: rel4-nomcs-release-${{ steps.date.outputs.date }}
