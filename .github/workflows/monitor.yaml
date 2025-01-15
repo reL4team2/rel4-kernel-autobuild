@@ -5,9 +5,8 @@ on:
     types: [rel4-kernel-update-event]
   workflow_dispatch:
 jobs:
-  runs-on: ubuntu-latest
-    permissions:
-      contents: write
+  Make-Rel4-Kernel-Release:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Build Environments
