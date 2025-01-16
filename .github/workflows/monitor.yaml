@@ -5,6 +5,10 @@ on:
     types: [rel4-kernel-update-event]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   Make-Rel4-Kernel-Release:
     runs-on: ubuntu-latest
