@@ -11,13 +11,13 @@ git clone https://github.com/reL4team2/seL4_c_impl.git kernel --config advice.de
 git clone https://github.com/reL4team2/rel4-linux-kit.git kit --config advice.detachedHead=false
 cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
-python3 generator.py -p qemu-arm-virt
-cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC
+cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC --bin rel4_kernel -F BUILD_BINARY
 cd ../../kernel
 cmake \
     -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
     -DCMAKE_INSTALL_PREFIX=${REL4_PREFIX} \
     -DKernelAllowSMCCalls=ON \
+    -DREL4_KERNEL=TRUE \
     -C ./kernel-settings-aarch64.cmake \
     -G Ninja \
     -S . \
