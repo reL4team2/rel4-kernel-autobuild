@@ -28,8 +28,8 @@ ninja -C build install
 
 rustup default nightly-2024-08-01
 
-url="https://github.com/seL4/rust-sel4";
-rev="1cd063a0f69b2d2045bfa224a36c9341619f0e9b";
+url="https://github.com/reL4team2/rust-sel4.git";
+rev="642b58d807c5e5fc22f0c15d1467d6bec328faa9";
 common_args="--git $url --rev $rev --root $REL4_INSTALL_DIR";
 
 cargo install $common_args \
@@ -53,5 +53,6 @@ dd if=/dev/zero of=mount.img bs=4M count=32
 mkfs.ext4 -b 4096 mount.img
 wget https://musl.cc/aarch64-linux-musl-cross.tgz
 tar zxf aarch64-linux-musl-cross.tgz
+rm -rf aarch64-linux-musl-cross.tgz
 export PATH=$PATH:`pwd`/aarch64-linux-musl-cross/bin
 make test-examples
