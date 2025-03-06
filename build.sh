@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
-# 默认不支持MCS，如果需要MCS，可以修改脚本使用传参的形式开启 -F KERNEL_MCS
-# 或者切换到rel4-mcs分支
-
-export REL4_INSTALL_DIR=$(realpath .)/build/reL4
+export REL4_INSTALL_DIR=$(realpath .)/kit/.env/seL4
 export REL4_PREFIX=$REL4_INSTALL_DIR
 export SEL4_PREFIX=$REL4_INSTALL_DIR
 export CC_aarch64_unknown_none=aarch64-linux-gnu-gcc
 
 rustup default nightly-2024-02-01
 git clone https://github.com/reL4team2/rel4-integral.git rel4_kernel --config advice.detachedHead=false
-git clone https://github.com/reL4team2/seL4_c_impl.git --config advice.detachedHead=false
-cd rel4_kernel
+git clone https://github.com/reL4team2/seL4_c_impl.git kernel --config advice.detachedHead=false
+git clone https://github.com/reL4team2/rel4-linux-kit.git kit --config advice.detachedHead=false
+cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
-cargo build --release --target aarch64-unknown-none-softfloat
-cd ../seL4_c_impl
+python3 generator.py -p qemu-arm-virt
+cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC
+cd ../../kernel
 cmake \
     -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
     -DCMAKE_INSTALL_PREFIX=${REL4_PREFIX} \
+    -DKernelAllowSMCCalls=ON \
     -C ./kernel-settings-aarch64.cmake \
     -G Ninja \
     -S . \
@@ -45,3 +45,13 @@ cargo install \
     --target aarch64-unknown-none \
     $common_args \
     sel4-kernel-loader;
+
+cd ../kit
+pip install capstone
+pip install lief
+dd if=/dev/zero of=mount.img bs=4M count=32
+mkfs.ext4 -b 4096 mount.img
+wget https://musl.cc/aarch64-linux-musl-cross.tgz
+tar zxf aarch64-linux-musl-cross.tgz
+export PATH=$PATH:`pwd`/aarch64-linux-musl-cross/bin
+make test-examples
