@@ -7,17 +7,17 @@ export CC_aarch64_unknown_none=aarch64-linux-gnu-gcc
 
 rustup default nightly-2024-02-01
 if [ -d "rel4_kernel" ]; then
-        @echo "rel4_kernel dir exist"
+        echo "rel4_kernel dir exist"
 else
         git clone https://github.com/reL4team2/rel4-integral.git rel4_kernel --config advice.detachedHead=false
 fi
 if [ -d "kernel" ]; then
-        @echo "kernel dir exist"
+        echo "kernel dir exist"
 else
         git clone https://github.com/reL4team2/seL4_c_impl.git kernel --config advice.detachedHead=false
 fi
 if [ -d "kit" ]; then
-        @echo "kit dir exist"
+        echo "kit dir exist"
 else
         git clone https://github.com/reL4team2/rel4-linux-kit.git kit --config advice.detachedHead=false
 fi
@@ -63,7 +63,7 @@ pip install lief
 dd if=/dev/zero of=mount.img bs=4M count=32
 mkfs.ext4 -b 4096 mount.img
 if [ -f "aarch64-linux-musl-cross.tgz" ]; then
-        @echo "the musl cross complier is exist"
+        echo "the musl cross complier is exist"
 else
         wget https://musl.cc/aarch64-linux-musl-cross.tgz
         tar zxf aarch64-linux-musl-cross.tgz
