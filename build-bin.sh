@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
-
+set -eux
 export REL4_INSTALL_DIR=$(realpath .)/kit/.env/seL4
 export REL4_PREFIX=$REL4_INSTALL_DIR
 export SEL4_PREFIX=$REL4_INSTALL_DIR
 export CC_aarch64_unknown_none=aarch64-linux-gnu-gcc
 
 rustup default nightly-2024-02-01
-git clone https://github.com/reL4team2/rel4-integral.git rel4_kernel --config advice.detachedHead=false
-git clone https://github.com/reL4team2/seL4_c_impl.git kernel --config advice.detachedHead=false
-git clone https://github.com/reL4team2/rel4-linux-kit.git kit --config advice.detachedHead=false
+if [ -d "rel4_kernel" ]; then
+        @echo "rel4_kernel dir exist"
+else
+        git clone https://github.com/reL4team2/rel4-integral.git rel4_kernel --config advice.detachedHead=false
+fi
+if [ -d "kernel" ]; then
+        @echo "kernel dir exist"
+else
+        git clone https://github.com/reL4team2/seL4_c_impl.git kernel --config advice.detachedHead=false
+fi
+if [ -d "kit" ]; then
+        @echo "kit dir exist"
+else
+        git clone https://github.com/reL4team2/rel4-linux-kit.git kit --config advice.detachedHead=false
+fi
 cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
 cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC --bin rel4_kernel -F BUILD_BINARY
@@ -51,8 +63,15 @@ pip install capstone
 pip install lief
 dd if=/dev/zero of=mount.img bs=4M count=32
 mkfs.ext4 -b 4096 mount.img
-wget https://musl.cc/aarch64-linux-musl-cross.tgz
-tar zxf aarch64-linux-musl-cross.tgz
-rm -rf aarch64-linux-musl-cross.tgz
+if [ -f "aarch64-linux-musl-cross.tgz" ]; then
+        @echo "the musl cross complier is exist"
+else
+        wget https://musl.cc/aarch64-linux-musl-cross.tgz
+        tar zxf aarch64-linux-musl-cross.tgz
+fi
 export PATH=$PATH:`pwd`/aarch64-linux-musl-cross/bin
 make test-examples
+
+make run
+
+cd ../rel4_kernel && cargo clean
