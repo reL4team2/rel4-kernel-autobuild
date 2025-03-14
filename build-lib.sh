@@ -23,12 +23,14 @@ else
 fi
 cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
-cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC --lib
+cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC -F ENABLE_ARM_PCNT -F ENABLE_ARM_PTMR  --lib
 cd ../../kernel
 cmake \
     -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
     -DCMAKE_INSTALL_PREFIX=${REL4_PREFIX} \
     -DKernelAllowSMCCalls=ON \
+    -DKernelArmExportPCNTUser=ON \
+    -DKernelArmExportPTMRUser=ON \
     -C ./kernel-settings-aarch64.cmake \
     -G Ninja \
     -S . \
