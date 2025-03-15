@@ -23,7 +23,7 @@ else
 fi
 cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
-cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC --bin rel4_kernel -F BUILD_BINARY
+cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC -F ENABLE_ARM_PCNT -F ENABLE_ARM_PTMR --bin rel4_kernel -F BUILD_BINARY
 # install rel4 kernel
 mkdir -p $REL4_PREFIX/bin/
 cp ../target/aarch64-unknown-none-softfloat/release/rel4_kernel $REL4_PREFIX/bin/kernel.elf
@@ -34,6 +34,8 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=${REL4_PREFIX} \
     -DKernelAllowSMCCalls=ON \
     -DREL4_KERNEL=TRUE \
+    -DKernelArmExportPCNTUser=ON \
+    -DKernelArmExportPTMRUser=ON \
     -C ./kernel-settings-aarch64.cmake \
     -G Ninja \
     -S . \
