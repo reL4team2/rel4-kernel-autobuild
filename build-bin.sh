@@ -24,6 +24,10 @@ fi
 cd rel4_kernel/kernel
 cargo update -p home --precise 0.5.5
 cargo build --release --target aarch64-unknown-none-softfloat -F ENABLE_SMC --bin rel4_kernel -F BUILD_BINARY
+# install rel4 kernel
+mkdir -p $REL4_PREFIX/bin/
+cp ../target/aarch64-unknown-none-softfloat/release/rel4_kernel $REL4_PREFIX/bin/kernel.elf
+
 cd ../../kernel
 cmake \
     -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- \
